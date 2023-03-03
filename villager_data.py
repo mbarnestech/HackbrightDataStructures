@@ -19,10 +19,10 @@ def all_species(filename):
         for line in file:
 
             # strip trailing spaces and create list using '|' as a value separator
-            line = line.rstrip().split('|')
+            type = line.rstrip().split('|')[1]
             
             # add the 2nd value of line to species set
-            species.add(line[1])
+            species.add(type)
 
     return species
 
@@ -48,13 +48,13 @@ def get_villagers_by_species(filename, search_string="All"):
         for line in file:
 
             # strip trailing spaces and create list using '|' as a value separator
-            line = line.rstrip().split('|')
+            name, species = line.rstrip().split('|')[:2]
 
-            # check if species (line[1]) is equal to search_string
-            if line[1] == search_string or search_string == 'All':
+            # check if species or default ('All') is equal to search_string
+            if search_string in ('All', species):
                 
                 # add villager name to villagers list
-                villagers.append(line[0])
+                villagers.append(name)
 
     return sorted(villagers)
 
@@ -70,27 +70,69 @@ def all_names_by_hobby(filename):
         - list[list[str]]: a list of lists containing names
     """
 
-    names = [[],[],[],[],[],[]]
+    # names = [[],[],[],[],[],[]]
 
-    hobbies = ['Fitness', 'Nature', 'Education', 'Music', 'Fashion', 'Play']
+    # hobbies = ['Fitness', 'Nature', 'Education', 'Music', 'Fashion', 'Play']
 
-    # open file so that it will automatically close
-    with open(filename) as file:
+    # # open file so that it will automatically close
+    # with open(filename) as file:
 
-        # evaluate each line
-        for line in file:
+    #     # evaluate each line
+    #     for line in file:
 
-            # strip trailing spaces and create list using '|' as a value separator
-            line = line.rstrip().split('|')
+    #         # strip trailing spaces and create list using '|' as a value separator
+    #         line = line.rstrip().split('|')
 
-            # for loop to Fitness, Nature, Education, Music, Fashion, then Play
-            for idx in range(6):
-                if line[3] == hobbies[idx]:
-                    names[idx].append(line[0])
+    #         # for loop to Fitness, Nature, Education, Music, Fashion, then Play
+    #         for idx in range(6):
+    #             if line[3] == hobbies[idx]:
+    #                 names[idx].append(line[0])
             
-    return names
+    # return names
 
-print(all_names_by_hobby('villagers.csv'))
+    # copying Hackbright solution to play around with it
+    fitness = []
+    nature = []
+    education = []
+    music = []
+    fashion = []
+    play = []
+
+    data = open(filename)
+
+    for line in data:
+        # The `_` is a way to say, "Hey don't worry about this variable
+        # because we'll never use it --- we only care about `first`,
+        # `last`, and `hobby`.
+        #
+        # Python doesn't handle underscores in a special way or anything ---
+        # it's still just a variable name.
+        name, _, _, hobby, _ = line.rstrip().split("|")
+
+        if hobby == "Fitness":
+            fitness.append(name)
+        elif hobby == "Nature":
+            nature.append(name)
+        elif hobby == "Education":
+            education.append(name)
+        elif hobby == "Music":
+            music.append(name)
+        elif hobby == "Fashion":
+            fashion.append(name)
+        elif hobby == "Play":
+            play.append(name)
+
+    return [
+        sorted(fitness),
+        sorted(nature),
+        sorted(education),
+        sorted(music),
+        sorted(fashion),
+        sorted(play),
+    ]
+
+
+# print(all_names_by_hobby('villagers.csv'))
 
 def all_data(filename):
     """Return all the data in a file.
@@ -114,9 +156,9 @@ def all_data(filename):
         for line in file:
 
             # strip trailing spaces and create list using '|' as a value separator
-            line = tuple(line.rstrip().split('|'))
+            new_tuple = tuple(line.rstrip().split('|'))
 
-            all_data.append(line)
+            all_data.append(new_tuple)
 
     return all_data
 
@@ -186,4 +228,4 @@ def find_likeminded_villagers(filename, villager_name):
 
     return villagers
 
-# print(find_likeminded_villagers('villagers.csv', 'Skye'))
+print(find_likeminded_villagers('villagers.csv', 'Pinky'))
